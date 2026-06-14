@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forma | فورما</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Baloo+Bhaijaan+2:wght@500;700;800&family=Nunito:wght@400;600;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --orange:#FFB088;
+  --orange-deep:#FF9966;
+  --orange-light:#FFE8DC;
+  --cream:#FFF8F0;
+  --mint:#3DBE9A;
+  --dark:#3A2E2A;
+  --grey:#9B8F8A;
+  --white:#ffffff;
+  --radius:18px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+body{
+  font-family:'Nunito','Cairo',sans-serif;
+  background:#F7F5F3;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+  color:var(--dark);
+}
+.app{
+  width:100%;
+  max-width:480px;
+  height:90vh;
+  max-height:760px;
+  background:#ffffff;
+  border:1px solid #F0EDE9;
+  border-radius:28px;
+  box-shadow:0 12px 40px rgba(0,0,0,0.08);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  position:relative;
+}
+/* HEADER */
+.header{
+  background:var(--orange-deep);
+  color:white;
+  padding:18px 20px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-shrink:0;
+}
+.header .avatar{
+  width:42px; height:42px; border-radius:50%; background:rgba(255,255,255,0.25);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Baloo 2','Baloo Bhaijaan 2',sans-serif; font-weight:800; font-size:1.2rem; color:white;
+}
+.header .info h1{font-family:'Baloo 2','Baloo Bhaijaan 2',sans-serif; font-size:1.2rem;}
+.header .info p{font-size:0.78rem; opacity:0.9;}
+.progress-wrap{
+  height:5px; background:var(--orange-light); flex-shrink:0;
+}
+.progress-bar{height:100%; background:var(--mint); width:0%; transition:width .4s ease;}
+
+/* LANG SELECT SCREEN */
+.lang-screen{
+  flex:1;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:22px; padding:30px; text-align:center; color:var(--dark);
+  background:#ffffff;
+}
+.lang-screen .avatar-big{
+  width:90px; height:90px; border-radius:50%; background:var(--orange-deep);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Baloo 2','Baloo Bhaijaan 2',sans-serif; font-weight:800; font-size:2.4rem; color:white;
+}
+.lang-screen h2{font-family:'Baloo 2','Baloo Bhaijaan 2',sans-serif; font-size:1.5rem;}
+.lang-screen p{color:var(--grey); font-size:0.92rem; max-width:320px;}
+.splash-img-wrap{width:100%; display:flex; justify-content:center; flex-shrink:0; background:#ffffff;}
+.splash-img{width:400px; height:400px; object-fit:contain; mix-blend-mode:multiply;}
+.splash-text{text-align:center; padding:0 10px; background:#ffffff; width:100%;}
+.lang-buttons{display:flex; gap:12px; flex-wrap:wrap; justify-content:center;}
+.lang-btn{
+  background:var(--orange-deep); color:white; border:none;
+  padding:14px 28px; border-radius:14px; font-size:1rem; font-weight:800;
+  cursor:pointer; font-family:'Baloo 2','Baloo Bhaijaan 2',sans-serif; transition:transform .15s, box-shadow .15s;
+  box-shadow:0 5px 0 #E8773E;
+}
+.lang-btn:hover{transform:translateY(-2px);}
+.lang-btn:active{transform:translateY(2px); box-shadow:0 1px 0 #E8773E;}
+.lang-btn.alt{background:var(--mint); box-shadow:0 5px 0 #2c9c80;}
+
+/* CHAT AREA */
+.chat-screen{display:none; flex:1; flex-direction:column; overflow:hidden;}
+.chat-screen.active{display:flex;}
+.messages{
+  flex:1; overflow-y:auto; padding:18px; display:flex; flex-direction:column; gap:12px;
+  background:var(--cream);
+}
+.msg-row{display:flex; gap:8px; align-items:flex-end; max-width:88%; animation:pop .25s ease;}
+@keyframes pop{from{opacity:0; transform:translateY(8px) scale(.97);} to{opacity:1; transform:translateY(0) scale(1);}}
+.msg-row.bot{align-self:flex-start;}
+.msg-row.user{align-self:flex-end; flex-direction:row-reverse; margin-left:auto;}
+[dir="rtl"] .msg-row.user{margin-left:0; margin-right:auto;}
+.msg-row .avatar-mini{
+  width:30px; height:30px; flex-shrink:0; border-radius:50%; background:var(--orange-deep);
+  display:flex; align-items:center; justify-content:center; color:white; font-weight:800;
+  font-family:'Baloo 2','Baloo Bhaijaan 2',sans-serif; font-size:0.95rem;
+}
+.bubble{
+  padding:11px 16px; border-radius:var(--radius); font-size:0.92rem; line-height:1.5;
+}
+.bot .bubble{background:#ffffff; border:1px solid var(--orange-light); border-bottom-left-radius:4px;}
+[dir="rtl"] .bot .bubble{border-bottom-left-radius:var(--radius); border-bottom-right-radius:4px;}
+.user .bubble{background:var(--orange-deep); color:white; border-bottom-right-radius:4px;}
+[dir="rtl"] .user .bubble{border-bottom-right-radius:var(--radius); border-bottom-left-radius:4px;}
+.section-tag{
+  align-self:center; background:var(--mint); color:white; font-size:0.75rem;
+  padding:5px 14px; border-radius:20px; font-weight:700; font-family:'Baloo 2','Baloo Bhaijaan 2',sans-serif;
+  margin:6px 0;
+}
+
+/* INPUT AREA */
+.input-area{
+  display:flex; gap:8px; padding:14px; border-top:1px solid var(--orange-light); background:white; flex-shrink:0;
+}
+.input-area textarea{
+  flex:1; border:2px solid var(--orange-light); border-radius:14px; padding:10px 14px;
+  font-family:inherit; font-size:0.95rem; resize:none; outline:none; max-height:90px;
+  transition:border-color .2s;
+}
+.input-area textarea:focus{border-color:var(--orange-deep);}
+.send-btn{
+  background:var(--orange-deep); border:none; border-radius:50%; width:46px; height:46px;
+  display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; transition:transform .15s;
+}
+.send-btn:hover{transform:scale(1.08);}
+.send-btn svg{width:20px; height:20px; fill:white;}
+[dir="rtl"] .send-btn svg{transform:scaleX(-1);}
+
+/* SUMMARY */
+.summary-actions{
+  display:flex; gap:10px; padding:14px; border-top:1px solid var(--orange-light); background:white; flex-shrink:0; flex-wrap:wrap;
+}
+.action-btn{
+  flex:1; background:var(--mint); color:white; border:none; padding:12px; border-radius:14px;
+  font-weight:800; cursor:pointer; font-family:'Baloo 2','Baloo Bhaijaan 2',sans-serif; font-size:0.9rem;
+}
+.action-btn.secondary{background:var(--orange-deep);}
+
+.typing{display:flex; gap:4px; padding:6px 0;}
+.typing span{width:7px; height:7px; background:var(--orange-deep); border-radius:50%; animation:blink 1.2s infinite;}
+.typing span:nth-child(2){animation-delay:.2s;}
+.typing span:nth-child(3){animation-delay:.4s;}
+@keyframes blink{0%,80%,100%{opacity:.2;} 40%{opacity:1;}}
+</style>
+</head>
+<body>
+<div class="app" id="app" dir="rtl">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="avatar" id="headerAvatar"></div>
+    <div class="info">
+      <h1 id="headerTitle">فورما</h1>
+      <p id="headerSub">مساعدتك الغذائية الذكية</p>
+    </div>
+  </div>
+  <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+  <!-- LANGUAGE SELECT -->
+  <div class="lang-screen" id="langScreen">
+    <div class="splash-img-wrap">
+      <img src="https://i.ibb.co/mCG08z7Q/Gemini-Generated-Image-qsa4ddqsa4ddqsa4.png" alt="فورما" class="splash-img"/>
+    </div>
+    <div class="splash-text">
+      <h2 id="welcomeTitle">أهلاً بيك! أنا فورما 🧡</h2>
+      <p id="welcomeText">هسألك شوية أسئلة بسيطة عشان نجهزلك نظام غذائي يناسبك تمام. اختار لغتك:</p>
+    </div>
+    <div class="lang-buttons">
+      <button class="lang-btn" onclick="startChat('ar')">🇪🇬 العربية</button>
+      <button class="lang-btn alt" onclick="startChat('en')">🇬🇧 English</button>
+    </div>
+  </div>
+
+  <!-- CHAT -->
+  <div class="chat-screen" id="chatScreen">
+    <div class="messages" id="messages"></div>
+    <div class="input-area" id="inputArea">
+      <textarea id="userInput" rows="1" placeholder=""></textarea>
+      <button class="send-btn" onclick="handleSend()">
+        <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
+      </button>
+    </div>
+    <div class="summary-actions" id="summaryActions" style="display:none;">
+      <button class="action-btn" onclick="downloadCSV()" id="csvBtn">تحميل النتائج (CSV)</button>
+      <button class="action-btn secondary" onclick="copyAll()" id="copyBtn">نسخ كل الإجابات</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============ FORMA AVATAR (SVG) ============ */
+document.getElementById('headerAvatar').textContent = 'F';
+document.getElementById('bigAvatar').textContent = 'F';
+
+/* ============ TEXT CONTENT ============ */
+const T = {
+  ar: {
+    headerTitle:"فورما", headerSub:"مساعدتك الغذائية الذكية",
+    welcomeTitle:"أهلاً بيك! أنا فورما 🧡",
+    welcomeText:"هسألك شوية أسئلة بسيطة عشان أقدر أساعد في تجهيز نظام غذائي يناسبك تمام. اختار اللغة المفضلة:",
+    placeholder:"اكتب إجابتك هنا...",
+    emailError:"ممكن تكتب بريد إلكتروني صحيح (فيه @ ونقطة)؟ 🙏",
+    requiredError:"محتاجة إجابة عشان نقدر نكمل 🙂",
+    thankyou:"تماام! 🎉 شكراً جداً على وقتك وثقتك. كل المعلومات دي هتساعدنا نجهزلك نظام يناسب حياتك تمام. هتلاقي زرار تحميل النتائج تحت 👇",
+    download:"تحميل النتائج (CSV)",
+    copy:"نسخ كل الإجابات",
+    copied:"تم نسخ الإجابات ✅",
+    sections:{
+      basic:"البيانات الأساسية", body:"البيانات الجسمانية", medical:"الحالة الصحية",
+      symptoms:"الأعراض اليومية", habits:"العادات اليومية", env:"البيئة المحيطة",
+      psych:"الجانب النفسي", end:"خلصنا! 🎉"
+    }
+  },
+  en: {
+    headerTitle:"Forma", headerSub:"Your smart nutrition buddy",
+    welcomeTitle:"Hi there! I'm Forma 🧡",
+    welcomeText:"I'll ask you a few simple questions so we can build a nutrition plan that truly fits you. Choose your language:",
+    placeholder:"Type your answer here...",
+    emailError:"Could you enter a valid email (with @ and a dot)? 🙏",
+    requiredError:"I need an answer to continue 🙂",
+    thankyou:"All done! 🎉 Thank you so much for your time and trust. This info will help us build a plan that fits your life perfectly. You'll find a download button below 👇",
+    download:"Download Results (CSV)",
+    copy:"Copy all answers",
+    copied:"Answers copied ✅",
+    sections:{
+      basic:"Basic Information", body:"Body Information", medical:"Health Status",
+      symptoms:"Daily Symptoms", habits:"Daily Habits", env:"Surroundings",
+      psych:"Psychological Side", end:"All done! 🎉"
+    }
+  }
+};
+
+/* ============ QUESTIONS ============ */
+// type: text | number | choice
+const QUESTIONS = [
+  {key:"name", section:"basic", ar:"ما اسمك؟", en:"What's your name?", type:"text"},
+  {key:"age", section:"basic", ar:"كام سنّك؟", en:"How old are you?", type:"number"},
+  {key:"gender", section:"basic", ar:"النوع؟ (ذكر / أنثى)", en:"Gender? (Male / Female)", type:"text"},
+  {key:"marital", section:"basic", ar:"الحالة الاجتماعية؟", en:"Marital status?", type:"text"},
+  {key:"email", section:"basic", ar:"بريدك الإلكتروني؟", en:"Your email address?", type:"email"},
+
+  {key:"weight", section:"body", ar:"وزنك الحالي (كجم)؟", en:"Current weight (kg)?", type:"number"},
+  {key:"height", section:"body", ar:"طولك (سم)؟", en:"Height (cm)?", type:"number"},
+  {key:"waist", section:"body", ar:"محيط الخصر (سم)؟", en:"Waist circumference (cm)?", type:"number"},
+  {key:"maxWeight", section:"body", ar:"أعلى وزن وصلتي/وصلت له في حياتك (لو حصل)؟", en:"Highest weight you've ever reached (if any)?", type:"text"},
+  {key:"goal", section:"body", ar:"إيه هدفك اللي عايز توصل له؟", en:"What's the goal you want to achieve?", type:"text"},
+
+  {key:"chronic", section:"medical", ar:"هل عندك مرض مزمن أو شكوى مستمرة (ارتجاع، قولون، إمساك، مغص دائم)؟ اكتب التفاصيل أو 'لا'", en:"Any chronic illness or ongoing complaint (reflux, IBS, constipation, recurring cramps)? Give details or write 'No'", type:"text"},
+  {key:"meds", section:"medical", ar:"هل تأخذ أدوية/فيتامينات/مكملات؟ اذكرها أو اكتب 'لا'", en:"Do you take any medications/vitamins/supplements? List them or write 'No'", type:"text"},
+  {key:"tests", section:"medical", ar:"عملت تحاليل طبية آخر 3 شهور؟ لو نعم، اذكر النوع والنتيجة، أو اكتب 'لا'", en:"Any medical tests in the last 3 months? If yes, mention type & result, or write 'No'", type:"text"},
+  {key:"surgeries", section:"medical", ar:"هل عملت أي عمليات جراحية من قبل (مرارة، زائدة، لوز...)؟ اذكرها أو اكتب 'لا'", en:"Any previous surgeries (gallbladder, appendix, tonsils...)? List them or write 'No'", type:"text"},
+
+  {key:"allergy", section:"symptoms", ar:"هل عندك حساسية من نوع طعام معين؟", en:"Do you have an allergy to a certain food?", type:"text"},
+  {key:"fatigue", section:"symptoms", ar:"هل تحس بإجهاد مع أبسط حركة أو نشاط؟", en:"Do you feel exhausted with the simplest activity?", type:"text"},
+  {key:"skinHair", section:"symptoms", ar:"إزاي حالة شعرك وأظافرك وبشرتك بشكل عام؟", en:"How's the general health of your hair, nails and skin?", type:"text"},
+  {key:"vision", section:"symptoms", ar:"هل في مشاكل في النظر؟", en:"Any vision problems?", type:"text"},
+
+  {key:"prevDiet", section:"habits", ar:"جربت نظام غذائي قبل كده؟ إيه هو، وقعدت عليه قد إيه، والنتيجة كانت إيه؟", en:"Have you tried a diet before? What was it, how long did you follow it, and what was the result?", type:"text"},
+  {key:"fastfood", section:"habits", ar:"معدل أكل الوجبات السريعة في الشهر؟", en:"How often do you eat fast food per month?", type:"text"},
+  {key:"exercise", section:"habits", ar:"هل تمارس أي نوع رياضة؟ إيه هو ولو لأ اكتب 'لا'", en:"Do you exercise? What kind, or write 'No'", type:"text"},
+  {key:"mealsCount", section:"habits", ar:"عدد الوجبات اللي تاكلها في اليوم؟", en:"How many meals do you eat per day?", type:"number"},
+  {key:"mealTimes", section:"habits", ar:"هل عندك مواعيد ثابتة للأكل أو روتين معين؟", en:"Do you have fixed meal times or a routine?", type:"text"},
+  {key:"cantQuit", section:"habits", ar:"هل في أكلة معينة مش قادر تستغنى عنها؟", en:"Is there a specific food you can't give up?", type:"text"},
+  {key:"water", section:"habits", ar:"معدل شرب المياه يوميًا؟", en:"Your daily water intake?", type:"text"},
+  {key:"sleep", section:"habits", ar:"عدد ساعات نومك وجودته (متواصل/متقطع) ومواعيد ثابتة؟", en:"Sleep hours & quality (continuous/interrupted), and is it at fixed times?", type:"text"},
+
+  {key:"familyHistory", section:"env", ar:"هل في تاريخ عائلي لمرض معين؟ اذكره أو اكتب 'لا'", en:"Any family history of a specific disease? Mention it or write 'No'", type:"text"},
+  {key:"work", section:"env", ar:"طبيعة شغلك؟", en:"What's the nature of your job?", type:"text"},
+  {key:"foodControl", section:"env", ar:"مين بيجهز أكلك في البيت، وهل عندك تحكم في اختياره؟", en:"Who prepares your food at home, and do you have control over choosing it?", type:"text"},
+
+  {key:"selfImage", section:"psych", ar:"إزاي تفكر في نفسك وفي مظهرك؟", en:"How do you think about yourself and your appearance?", type:"text"},
+  {key:"appearanceEffect", section:"psych", ar:"هل تحس إن مظهرك بيأثر على نظرة الناس وتعاملهم معك؟", en:"Do you feel your appearance affects how people view and treat you?", type:"text"},
+  {key:"extremeDiets", section:"psych", ar:"هل تلجأ لحميات قاسية أو غير منطقية؟", en:"Do you resort to extreme or unrealistic diets?", type:"text"},
+  {key:"calorieFocus", section:"psych", ar:"إلى أي مدى تهتم بحساب السعرات في كل وجبة؟", en:"How much do you focus on calorie counting per meal?", type:"text"},
+  {key:"foodMeaning", section:"psych", ar:"الأكل بالنسبة لك إيه؟ (متعة / روتين / سد جوع)", en:"What does food mean to you? (pleasure / routine / just hunger)", type:"text"},
+  {key:"moodEating", section:"psych", ar:"هل مزاجك (حزن/فرح/توتر) بيأثر على كمية أكلك زيادة أو نقصان؟", en:"Does your mood (sad/happy/stressed) affect how much you eat?", type:"text"},
+  {key:"stressEating", section:"psych", ar:"هل تواجه ضغط الشغل أو البيت بالأكل والحلويات؟", en:"Do you cope with work/home stress through food and sweets?", type:"text"},
+  {key:"childhoodFood", section:"psych", ar:"في أكلة بترجعك لذكريات الطفولة؟", en:"Is there a food that takes you back to childhood memories?", type:"text"},
+  {key:"bodyArea", section:"psych", ar:"هل في منطقة معينة في جسمك مش راضي عنها وعايز تغيرها؟", en:"Is there a specific area of your body you're unhappy with and want to change?", type:"text"},
+  {key:"distracted", section:"psych", ar:"هل تاكل وانت مشغول (موبايل/تلفزيون) ولا بتركز في أكلك؟", en:"Do you eat while distracted (phone/TV), or do you focus on your meal?", type:"text"},
+  {key:"stressLevel", section:"psych", ar:"بشكل عام، إزاي تقيّم مستوى التوتر/الضغط النفسي في حياتك دلوقتي؟", en:"Overall, how would you rate your current stress level in life?", type:"text"},
+
+  {key:"other", section:"psych", ar:"أي معلومة تانية تحب تضيفها؟", en:"Anything else you'd like to add?", type:"text"}
+];
+
+/* ============ STATE ============ */
+let lang = "ar";
+let currentIndex = 0;
+let answers = {};
+let currentSection = "";
+
+const messagesEl = document.getElementById('messages');
+const userInput = document.getElementById('userInput');
+const progressBar = document.getElementById('progressBar');
+
+function startChat(l){
+  lang = l;
+  const root = document.getElementById('app');
+  root.setAttribute('dir', l === 'ar' ? 'rtl' : 'ltr');
+  document.documentElement.lang = l;
+  root.style.fontFamily = l === 'ar' ? "'Cairo','Baloo Bhaijaan 2',sans-serif" : "'Nunito','Baloo 2',sans-serif";
+
+  const t = T[l];
+  document.getElementById('headerTitle').textContent = t.headerTitle;
+  document.getElementById('headerSub').textContent = t.headerSub;
+  userInput.placeholder = t.placeholder;
+
+  document.getElementById('langScreen').style.display = 'none';
+  document.getElementById('chatScreen').classList.add('active');
+
+  askQuestion(0);
+}
+
+function avatarMini(){
+  const d = document.createElement('div');
+  d.className = 'avatar-mini';
+  d.textContent = 'F';
+  return d;
+}
+
+function addBotMessage(text, withTyping=true, cb=null){
+  if(withTyping){
+    const row = document.createElement('div');
+    row.className = 'msg-row bot';
+    row.appendChild(avatarMini());
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble typing';
+    bubble.innerHTML = '<span></span><span></span><span></span>';
+    row.appendChild(bubble);
+    messagesEl.appendChild(row);
+    scrollDown();
+    setTimeout(()=>{
+      bubble.classList.remove('typing');
+      bubble.textContent = text;
+      bubble.innerHTML = text.replace(/\n/g,'<br>');
+      scrollDown();
+      if(cb) cb();
+    }, 450);
+  } else {
+    const row = document.createElement('div');
+    row.className = 'msg-row bot';
+    row.appendChild(avatarMini());
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    bubble.innerHTML = text.replace(/\n/g,'<br>');
+    row.appendChild(bubble);
+    messagesEl.appendChild(row);
+    scrollDown();
+    if(cb) cb();
+  }
+}
+
+function addUserMessage(text){
+  const row = document.createElement('div');
+  row.className = 'msg-row user';
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.textContent = text;
+  row.appendChild(bubble);
+  messagesEl.appendChild(row);
+  scrollDown();
+}
+
+function addSectionTag(name){
+  const tag = document.createElement('div');
+  tag.className = 'section-tag';
+  tag.textContent = name;
+  messagesEl.appendChild(tag);
+  scrollDown();
+}
+
+function scrollDown(){
+  setTimeout(()=>{ messagesEl.scrollTop = messagesEl.scrollHeight; }, 50);
+}
+
+function askQuestion(index){
+  if(index >= QUESTIONS.length){
+    finishChat();
+    return;
+  }
+  const q = QUESTIONS[index];
+  if(q.section !== currentSection){
+    currentSection = q.section;
+    addSectionTag(T[lang].sections[currentSection]);
+  }
+  updateProgress(index);
+  addBotMessage(q[lang]);
+}
+
+function updateProgress(index){
+  const pct = Math.round((index / QUESTIONS.length) * 100);
+  progressBar.style.width = pct + '%';
+}
+
+function handleSend(){
+  const val = userInput.value.trim();
+  const q = QUESTIONS[currentIndex];
+  const t = T[lang];
+
+  if(val === ""){
+    addBotMessage(t.requiredError);
+    return;
+  }
+  if(q.type === "email" && !/^\S+@\S+\.\S+$/.test(val)){
+    addBotMessage(t.emailError);
+    return;
+  }
+
+  addUserMessage(val);
+  answers[q.key] = val;
+  userInput.value = "";
+  currentIndex++;
+  setTimeout(()=> askQuestion(currentIndex), 350);
+}
+
+userInput.addEventListener('keydown', function(e){
+  if(e.key === 'Enter' && !e.shiftKey){
+    e.preventDefault();
+    handleSend();
+  }
+});
+
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbzw2Uff59GiEZLDXMqXHyJJxWFQfWJ_9Wju6GOE5fO3z5FUAN7YBpa6XUfjtfrF33N6Dg/exec";
+
+async function sendToSheet(){
+  try {
+    await fetch(SHEET_URL, {
+      method:"POST",
+      mode:"no-cors",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify(answers)
+    });
+    console.log("Data sent to sheet");
+  } catch(e) {
+    console.error("Sheet error:", e);
+  }
+}
+
+function finishChat(){
+  progressBar.style.width = '100%';
+  sendToSheet();
+  addSectionTag(T[lang].sections.end);
+  addBotMessage(T[lang].thankyou, true, ()=>{
+    document.getElementById('inputArea').style.display = 'none';
+    const sa = document.getElementById('summaryActions');
+    sa.style.display = 'flex';
+    document.getElementById('csvBtn').textContent = T[lang].download;
+    document.getElementById('copyBtn').textContent = T[lang].copy;
+  });
+}
+
+/* ============ EXPORT ============ */
+function buildCSV(){
+  const headers = ['key', ...QUESTIONS.map(q=>q.key)];
+  const arLabels = QUESTIONS.map(q=>q.ar);
+  const enLabels = QUESTIONS.map(q=>q.en);
+  const values = QUESTIONS.map(q => (answers[q.key]||'').replace(/"/g,'""'));
+
+  let csv = '';
+  csv += '"السؤال (عربي)","Question (English)","الإجابة / Answer"\n';
+  for(let i=0;i<QUESTIONS.length;i++){
+    csv += `"${arLabels[i].replace(/"/g,'""')}","${enLabels[i].replace(/"/g,'""')}","${values[i]}"\n`;
+  }
+  return csv;
+}
+
+function downloadCSV(){
+  const csv = buildCSV();
+  const blob = new Blob(["\uFEFF" + csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  const name = (answers.name || 'client').replace(/\s+/g,'_');
+  a.download = `Forma_${name}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function copyAll(){
+  let text = '';
+  QUESTIONS.forEach(q=>{
+    text += `${q[lang]}\n${answers[q.key]||''}\n\n`;
+  });
+  navigator.clipboard.writeText(text).then(()=>{
+    addBotMessage(T[lang].copied, false);
+  });
+}
+</script>
+</body>
+</html>
